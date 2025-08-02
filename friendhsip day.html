@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>For Maggie - Best Friend Day</title>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2&display=swap" rel="stylesheet" />
+  <style>
+    /* Reset */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      background: #1a1a2e;
+      font-family: 'Baloo 2', cursive;
+      color: white;
+      overflow-x: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0 15px;
+      position: relative;
+    }
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      border-radius: 50px;
+      background: linear-gradient(135deg, #ff79c6, #ffb3d9);
+      padding: 14px 36px;
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: #1a1a2e;
+      box-shadow: 0 8px 20px rgba(255,121,198,0.5);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      user-select: none;
+      margin: 10px;
+      outline-offset: 4px;
+    }
+    button:hover, button:focus {
+      transform: scale(1.05);
+      box-shadow: 0 12px 28px rgba(255,121,198,0.7);
+      outline: 3px solid #ff79c6;
+      outline-offset: 6px;
+    }
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 0.2em;
+      color: #ff79c6;
+      text-shadow: 0 0 10px #ff79c6;
+      user-select: none;
+    }
+    .page {
+      width: 100%;
+      max-width: 440px;
+      min-height: 70vh;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      padding: 20px;
+      box-sizing: border-box;
+      animation: fadeIn 0.6s ease forwards;
+    }
+    .page.active {
+      display: flex;
+    }
+    #welcomePage p {
+      font-size: 1.3rem;
+      margin-bottom: 2em;
+      color: #ffa3d1;
+      user-select: none;
+      max-width: 300px;
+    }
+
+    #reasonContainer {
+      flex-wrap: wrap;
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+    }
+    .reason-card {
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      border-radius: 25px;
+      padding: 18px 20px;
+      width: 100%;
+      max-width: 320px;
+      color: #1a1a2e;
+      font-weight: 600;
+      font-size: 1.15rem;
+      box-shadow: 0 12px 24px rgb(255 154 158 / 0.4);
+      cursor: default;
+      user-select: none;
+      transform-origin: center bottom;
+      animation: bounceIn 0.7s ease forwards;
+      position: relative;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+    }
+    .number-badge {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: #1a1a2e;
+      color: #ff79c6;
+      font-weight: 900;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1rem;
+      user-select: none;
+      box-shadow: 0 0 8px #ff79c6;
+    }
+    #navigation {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      user-select: none;
+    }
+    #finalPage h2 {
+      font-size: 2rem;
+      font-weight: 900;
+      color: #ff79c6;
+      text-shadow: 0 0 14px #ff79c6;
+      animation: glowPulse 2.5s ease-in-out infinite;
+      max-width: 90vw;
+      margin-bottom: 40px;
+    }
+    #confetti-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    @keyframes bounceIn {
+      0% {
+        opacity: 0;
+        transform: translateY(50px) scale(0.5);
+      }
+      60% {
+        opacity: 1;
+        transform: translateY(-10px) scale(1.1);
+      }
+      100% {
+        transform: translateY(0) scale(1);
+      }
+    }
+    @keyframes glowPulse {
+      0%, 100% {
+        text-shadow: 0 0 12px #ff79c6, 0 0 20px #ff79c6;
+      }
+      50% {
+        text-shadow: 0 0 20px #ff79c6, 0 0 28px #ff79c6;
+      }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    /* Responsive */
+    @media (max-width: 480px) {
+      h1 { font-size: 2.4rem; }
+      button {
+        font-size: 1rem;
+        padding: 12px 30px;
+      }
+      .reason-card {
+        font-size: 1rem;
+        max-width: 100%;
+      }
+      
+    }
+    .reason-card {
+  position: relative;
+  padding: 30px 20px 20px 50px; /* extra left padding for badge */
+  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+  border-radius: 25px;
+  color: #1a1a2e;
+  font-weight: 600;
+  font-size: 1.15rem;
+  box-shadow: 0 12px 24px rgb(255 154 158 / 0.4);
+  cursor: default;
+  user-select: none;
+  transform-origin: center bottom;
+  animation: bounceIn 0.7s ease forwards;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.number-badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: #1a1a2e;
+  color: #ff79c6;
+  font-weight: 900;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.1rem;
+  user-select: none;
+  box-shadow: 0 0 10px #ff79c6;
+  border: 2px solid #ff79c6;
+}
+
+  </style>
+</head>
+<body>
+
+  <!-- Welcome Page -->
+  <section id="welcomePage" class="page active" aria-label="Welcome Page">
+    <h1>Hey Maggie! ❤️</h1>
+    <p>This is a special message just for you, my forever best friend.</p>
+    <button id="startBtn" aria-label="Start Reading Reasons">Start</button>
+  </section>
+
+  <!-- Reasons Page -->
+  <section id="reasonsPage" class="page" aria-label="Reasons Page">
+    <h1>Why You're So Special</h1>
+    <div id="reasonContainer"></div>
+    <div id="navigation">
+      <button id="prevBtn" aria-label="Previous Reason">Previous</button>
+      <button id="nextBtn" aria-label="Next Reason">Next</button>
+      <button id="finalBtn" aria-label="Go to Final Message" style="display:none;">Final Message 🎉</button>
+    </div>
+  </section>
+
+  <!-- Final Page -->
+  <section id="finalPage" class="page" aria-label="Final Message Page">
+    <h2>Tujhse achhi best friend mujhe kabhi nahi mil sakti — Happy Friendship Day meri jaan! ❤️</h2>
+    <button id="restartBtn" aria-label="Restart Message">Restart</button>
+    <canvas id="confetti-canvas"></canvas>
+  </section>
+
+<script>
+  const reasons = [
+    "Tu meri life ki sabse important ladki hai.",
+    "Teri muskurahat mere mood ko instantly theek kar deti hai.",
+    "Tu meri life ka wo hissa hai jo kabhi alag nahi ho sakta.",
+    "Tere bina meri zindagi incomplete lagti hai.",
+    "Tere saath ki har yaad meri jaan hai.",
+    "Tujhse baat karke din ban jaata hai mera.",
+    "Tere jaise loyal friend har kisi ko nahi milta.",
+    "Teri dosti ke aage duniya ki har relationship chhoti lagti hai.",
+    "Tu mere dil ki sabse safe jagah hai.",
+    "Teri dosti mere liye ek emotional support hai jo kabhi kamzor nahi hota.",
+    "Tere saath main apna asli version hoon.",
+    "Teri aankhon mein dosti aur sachai dono dikhti hai.",
+    "Tu meri life ki sabse pyari ladki hai jo hamesha saath hoti hai.",
+    "Tere saath kiya har bakwas bhi mere liye special hai.",
+    "Tu mujhe bina bole samajh leti hai.",
+    "Tere bina mere din adhoore lagte hain.",
+    "Tu meri life ki sabse pyari blessing hai.",
+    "Tere bina main kuch nahi hoon, aur tere saath main sab kuch hoon.",
+    "Tere saath har problem chhoti lagti hai.",
+    "Teri dosti meri life ki sabse badi wealth hai.",
+    "Tere saath ki gappe meri therapy hoti hain.",
+    "Tu meri life ki wo insan hai jisse main sabse zyada trust karta hoon.",
+    "Tu mere dukh ka solution aur meri khushi ka reason hai.",
+    "Tu meri life ki best habit hai jo chhod nahi sakta.",
+    "Tere saath chhoti chhoti cheezein bhi adventure lagti hain.",
+    "Tu jab mere saath hoti hai to main sab kuch bhool jata hoon.",
+    "Tere saath guzaara har moment meri life ka highlight hai.",
+    "Tu meri personal cheerleader hai.",
+    "Tere saath ki dosti kaafi hai mere liye.",
+    "Teri hansi meri favourite music hai.",
+    "Tu meri sabse loyal aur true dost hai.",
+    "Teri friendship meri zindagi ka gift hai jo kabhi khatam nahi hota.",
+    "Tu mere liye ek emotion hai jo sabse pure hai.",
+    "Teri baatein mere dil ko sukoon deti hain.",
+    "Tere saath jo bond hai woh duniya ka best connection hai.",
+    "Tu meri life ka wo insan hai jiske saath main khud ko khud se zyada pasand karta hoon.",
+    "Tere saath har lamha special ban jaata hai.",
+    "Tujhse behtar meri feelings koi nahi samajh sakta.",
+    "Tere saath ki gupshup meri energy booster hai.",
+    "Tu meri zindagi ka wo chapter hai jo hamesha open rahega.",
+    "Teri dosti meri sabse badi achievement hai.",
+    "Tu meri secret keeper aur heart healer hai.",
+    "Teri dosti se main zyada kuch aur maanga hi nahi kabhi.",
+    "Tere saath ka coffee session meri life ka stress therapy hai.",
+    "Teri ek smile meri duniya badal deti hai.",
+    "Tu meri life ka woh hissa hai jiska importance main explain nahi kar sakta.",
+    "Tu mere mood swings ka asli solution hai.",
+    "Teri dosti meri sabse pyari addiction hai.",
+    "Tu meri life mein ek angel ki tarah aayi hai.",
+    "Teri baatein meri zindagi ko rangin banati hain.",
+    "Tu meri woh dost hai jo mere rone pe hassi mein convert kar deti hai.",
+    "Tu meri life ka woh insan hai jo bina kahe sab kuch samajh leta hai.",
+    "Tu meri life ki best blessing hai jo main kabhi khona nahi chahta.",
+    "Tere saath ki dosti duniya ki sabse pure feeling hai.",
+    "Teri friendship mera pride hai.",
+    "Tere saath kiya har plan yaadgaar hai.",
+    "Tu meri personal stress reliever hai.",
+    "Teri baaton mein magic hai jo sab kuch theek kar deta hai.",
+    "Tu meri life mein ek permanent place le chuki hai.",
+    "Teri dosti meri strength hai.",
+    "Tere saath guzaare pal meri zindagi ka best part hain.",
+    "Tu meri emotional partner hai.",
+    "Tere saath har din ek nayi yaad ban jaata hai.",
+    "Tu meri zindagi ka woh insan jisko lose karne ka soch ke bhi dar lagta hai.",
+    "Teri friendship meri zindagi ki jaan hai.",
+    "Teri dosti mere liye sabse pure rishta hai.",
+    "Tere saath ki bakchodi meri life ka stress buster hai.",
+    "Tere bina meri life mein maza nahi hai.",
+    "Teri friendship meri calmness ka reason hai.",
+    "Tu meri life ka wo page jo kabhi close nahi hoga.",
+    "Tere saath kiya har fun mera mood lifter hai.",
+    "Tu meri dosti ki definition hai.",
+    "Tere saath har boring moment bhi special lagta hai.",
+    "Tu meri dosti ki wo story jo kabhi khatam nahi hoti.",
+    "Tere saath ki masti meri zindagi ki jaan hai.",
+    "Tu meri life ka sabse cute insan hai.",
+    "Tere saath ki yaadein meri zindagi ka treasure hain.",
+    "Teri dosti meri smile ki wajah hai.",
+    "Tu meri personal happiness generator hai.",
+    "Tere saath ki conversations meri therapy hain.",
+    "Tere bina meri dosti incomplete hai.",
+    "Teri har baat mere dil ko chhoo jaati hai.",
+    "Tu meri life ka constant support hai.",
+    "Tere saath ki friendship meri emotional recharge hai.",
+    "Tu meri dosti ka wo gift jo priceless hai.",
+    "Teri ek call mera pura din bana deti hai.",
+    "Tere saath ki bonding meri life ka best feeling hai.",
+    "Tu meri life ka woh insan jisse main kabhi khona nahi chahta.",
+    "Teri friendship meri zindagi ka best version hai.",
+    "Tu meri life ki sabse pyari habit hai.",
+    "Tere saath ki dosti meri duniya hai.",
+    "Tu meri zindagi ki sabse beautiful soul hai.",
+    "Tere saath ki bakchodi meri mental peace hai.",
+    "Tu meri life ki sabse loyal companion hai.",
+    "Teri dosti meri life ka ek alag hi chapter hai.",
+    "Tu meri life ki woh insan jiske saath har moment yaadgar hai."
+  ];
+
+  const welcomePage = document.getElementById("welcomePage");
+  const reasonsPage = document.getElementById("reasonsPage");
+  const finalPage = document.getElementById("finalPage");
+
+  const startBtn = document.getElementById("startBtn");
+  const prevBtn = document.getElementById("prevBtn");
+  const nextBtn = document.getElementById("nextBtn");
+  const finalBtn = document.getElementById("finalBtn");
+  const restartBtn = document.getElementById("restartBtn");
+  const reasonContainer = document.getElementById("reasonContainer");
+
+  let currentIndex = 0;
+
+  // Populate first reason
+  function showReason(index) {
+    reasonContainer.innerHTML = "";
+    const card = document.createElement("div");
+    card.className = "reason-card";
+    card.innerText = reasons[index];
+    const badge = document.createElement("div");
+    badge.className = "number-badge";
+    badge.textContent = index + 1;
+    card.appendChild(badge);
+    reasonContainer.appendChild(card);
+
+    // Handle button visibility
+    prevBtn.style.display = index === 0 ? "none" : "inline-block";
+    nextBtn.style.display = index === reasons.length - 1 ? "none" : "inline-block";
+    finalBtn.style.display = index === reasons.length - 1 ? "inline-block" : "none";
+  }
+
+  // Navigation handlers
+  startBtn.addEventListener("click", () => {
+    welcomePage.classList.remove("active");
+    reasonsPage.classList.add("active");
+    currentIndex = 0;
+    showReason(currentIndex);
+  });
+
+  prevBtn.addEventListener("click", () => {
+    if (currentIndex > 0) {
+      currentIndex--;
+      showReason(currentIndex);
+    }
+  });
+
+  nextBtn.addEventListener("click", () => {
+    if (currentIndex < reasons.length - 1) {
+      currentIndex++;
+      showReason(currentIndex);
+    }
+  });
+
+  finalBtn.addEventListener("click", () => {
+    reasonsPage.classList.remove("active");
+    finalPage.classList.add("active");
+    startConfetti();
+  });
+
+  restartBtn.addEventListener("click", () => {
+    finalPage.classList.remove("active");
+    welcomePage.classList.add("active");
+    stopConfetti();
+  });
+
+  /* Confetti animation from canvas */
+  const confettiCanvas = document.getElementById("confetti-canvas");
+  const ctx = confettiCanvas.getContext("2d");
+
+  let confettiPieces = [];
+  let confettiActive = false;
+
+  function randomRange(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
+  function createConfetti() {
+    const colors = ["#ff79c6", "#ffb3d9", "#ff6fa1", "#ff4584", "#ff98bb"];
+    confettiPieces = [];
+    for (let i = 0; i < 150; i++) {
+      confettiPieces.push({
+        x: randomRange(0, confettiCanvas.width),
+        y: randomRange(-confettiCanvas.height, 0),
+        size: randomRange(6, 12),
+        speed: randomRange(1, 3),
+        angle: randomRange(0, 2 * Math.PI),
+        angularSpeed: randomRange(-0.1, 0.1),
+        color: colors[Math.floor(Math.random() * colors.length)],
+        tilt: randomRange(-15, 15)
+      });
+    }
+  }
+
+  function drawConfetti() {
+    ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+    confettiPieces.forEach(p => {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.angle);
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(p.size, p.tilt);
+      ctx.lineTo(p.size, p.size + p.tilt);
+      ctx.lineTo(0, p.size);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    });
+  }
+
+  function updateConfetti() {
+    confettiPieces.forEach(p => {
+      p.y += p.speed;
+      p.angle += p.angularSpeed;
+      if (p.y > confettiCanvas.height) {
+        p.y = randomRange(-confettiCanvas.height, 0);
+        p.x = randomRange(0, confettiCanvas.width);
+      }
+    });
+  }
+
+  function confettiLoop() {
+    if (!confettiActive) return;
+    updateConfetti();
+    drawConfetti();
+    requestAnimationFrame(confettiLoop);
+  }
+
+  function startConfetti() {
+    confettiActive = true;
+    confettiCanvas.width = window.innerWidth;
+    confettiCanvas.height = window.innerHeight;
+    createConfetti();
+    confettiLoop();
+  }
+  function stopConfetti() {
+    confettiActive = false;
+    ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+  }
+
+  // Resize canvas on window resize
+  window.addEventListener("resize", () => {
+    confettiCanvas.width = window.innerWidth;
+    confettiCanvas.height = window.innerHeight;
+  });
+</script>
+</body>
+</html>
